@@ -5,19 +5,16 @@ import { userAtom } from "~/store/atoms/user";
 const MODAL_ID = "user_intro_modal";
 
 export default function IntroPopup() {
-  const [user, setUser] = useAtom(userAtom);
+  const [_, setUser] = useAtom(userAtom);
   const [newUserName, setNewUserName] = useState("");
   useEffect(() => {
     const modal = document.getElementById(MODAL_ID) as HTMLDialogElement;
     modal?.showModal();
   }, []);
 
-  // close on enter
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDialogElement>) => {
     if (e.key === "Enter") {
-      if (!user.name) return;
-      const modal = document.getElementById(MODAL_ID) as HTMLDialogElement;
-      modal?.close();
+      handleStartClick();
     }
   };
 

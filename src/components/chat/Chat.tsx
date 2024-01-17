@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChatBox from "./ChatBox";
 import { api } from "~/utils/api";
 import dayjs from "dayjs";
@@ -9,6 +9,8 @@ import type { Message } from "~/shared/types";
 import { useAtom } from "jotai";
 import { userAtom } from "~/store/atoms/user";
 import { getIntroMessageWithName } from "./helper-function";
+
+const CHAT_CONTAINER_ID = "chat-container";
 
 export default function Chat() {
   const [user] = useAtom(userAtom);
@@ -27,6 +29,8 @@ export default function Chat() {
   }, [user.name]);
   const { mutateAsync: replyToAi, isLoading: aiIsReplying } =
     api.post.replyToAi.useMutation();
+
+  const bottomItemRef = useRef<HTMLDivElement>(null);
 
   const sendMessage = async (message: string) => {
     const newMessage: Message = {
@@ -49,9 +53,13 @@ export default function Chat() {
     setMessages((messages) => [...messages, botMessage]);
   };
 
+  useEffect(() => {
+    bottomItemRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [messages]);
+
   return (
     <>
-      <div className="overflow-auto px-6 py-4">
+      <div className="overflow-auto px-6 py-4" id={CHAT_CONTAINER_ID}>
         {messages.map((message) => (
           <ChatBox
             key={message.text + message.time}
@@ -61,6 +69,7 @@ export default function Chat() {
           />
         ))}
         {aiIsReplying && <ChatLoader />}
+        <div ref={bottomItemRef}></div>
       </div>
       <Footer onSendMessage={sendMessage} isLoadingResponse={aiIsReplying} />
     </>

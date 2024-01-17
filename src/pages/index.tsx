@@ -15,7 +15,7 @@ export default function Home() {
         <title>The Great ChatBot</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex  min-h-screen flex-col items-center justify-center bg-neutral-900  font-mono text-gray-50">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-neutral-900  font-mono text-gray-50">
         <div className="container flex h-[99dvh] max-h-[99dvh] w-full max-w-lg flex-col rounded-lg border border-gray-50 sm:max-h-[500px]">
           <Header />
           <Chat />
