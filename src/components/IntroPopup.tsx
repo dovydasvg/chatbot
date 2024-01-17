@@ -11,8 +11,17 @@ export default function IntroPopup() {
     modal?.showModal();
   }, []);
 
+  // close on enter
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDialogElement>) => {
+    if (e.key === "Enter") {
+      if (!user.name) return;
+      const modal = document.getElementById(MODAL_ID) as HTMLDialogElement;
+      modal?.close();
+    }
+  };
+
   return (
-    <dialog id={MODAL_ID} className="modal">
+    <dialog id={MODAL_ID} className="modal" onKeyDown={handleKeyDown}>
       <div className="modal-box bg-neutral-800">
         <h3 className="text-lg font-bold">Hey! 👋</h3>
         <p className="py-4">
