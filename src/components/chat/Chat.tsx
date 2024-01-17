@@ -1,116 +1,54 @@
-import React from "react";
+import { useState } from "react";
 import ChatBox from "./ChatBox";
 import { api } from "~/utils/api";
-
-type Chat = {
-  message: string;
-  time: string;
-  sender: "bot" | "user";
-};
+import dayjs from "dayjs";
+import ChatLoader from "./ChatLoader";
+import Footer from "../Footer";
+import { getCurrentTimeString } from "~/utils/date";
+import { Message } from "~/shared/types";
 
 export default function Chat() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
-  const chats: Chat[] = [
+  const [messages, setMessages] = useState<Message[]>([
     {
-      message: "Hello there!",
-      time: "2 hours ago",
-      sender: "bot",
+      text: "Ciao! I'm Bianca, what's your name?",
+      time: dayjs().format("h:mm A"),
+      sender: "assistant",
     },
-    {
-      message: "General Kenobi!",
-      time: "2 hours ago",
+  ]);
+  const { mutateAsync: replyToAi, isLoading: aiIsReplying } =
+    api.post.replyToAi.useMutation();
+
+  const sendMessage = async (message: string) => {
+    const newMessage: Message = {
+      text: message,
+      time: getCurrentTimeString(),
       sender: "user",
-    },
-    {
-      message: "You are a bold one.",
-      time: "2 hours ago",
-      sender: "bot",
-    },
-    {
-      message: "Hello there!",
-      time: "2 hours ago",
-      sender: "bot",
-    },
-    {
-      message: "General Kenobi!",
-      time: "2 hours ago",
-      sender: "user",
-    },
-    {
-      message: "You are a bold one.",
-      time: "2 hours ago",
-      sender: "bot",
-    },
-    {
-      message: "Hello there!",
-      time: "2 hours ago",
-      sender: "bot",
-    },
-    {
-      message: "General Kenobi!",
-      time: "2 hours ago",
-      sender: "user",
-    },
-    {
-      message: "You are a bold one.",
-      time: "2 hours ago",
-      sender: "bot",
-    },
-    {
-      message: "Hello there!",
-      time: "2 hours ago",
-      sender: "bot",
-    },
-    {
-      message: "General Kenobi!",
-      time: "2 hours ago",
-      sender: "user",
-    },
-    {
-      message: "You are a bold one.",
-      time: "2 hours ago",
-      sender: "bot",
-    },
-    {
-      message: "Hello there!",
-      time: "2 hours ago",
-      sender: "bot",
-    },
-    {
-      message: "General Kenobi!",
-      time: "2 hours ago",
-      sender: "user",
-    },
-    {
-      message: "You are a bold one.",
-      time: "2 hours ago",
-      sender: "bot",
-    },
-    {
-      message: "Hello there!",
-      time: "2 hours ago",
-      sender: "bot",
-    },
-    {
-      message: "General Kenobi!",
-      time: "2 hours ago",
-      sender: "user",
-    },
-    {
-      message: "You are a bold one.",
-      time: "2 hours ago",
-      sender: "bot",
-    },
-  ];
+    };
+    setMessages((messages) => [...messages, newMessage]);
+
+    const response = await replyToAi({ messages: [...messages, newMessage] });
+    const botMessage: Message = {
+      text: response || "Sorry, I didn't get that",
+      time: getCurrentTimeString(),
+      sender: "assistant",
+    };
+
+    setMessages((messages) => [...messages, botMessage]);
+  };
+
   return (
-    <div className="overflow-auto px-6 py-4">
-      {chats.map((chat) => (
-        <ChatBox
-          message={chat.message}
-          time={chat.time}
-          position={chat.sender === "bot" ? "start" : "end"}
-        />
-      ))}
-    </div>
+    <>
+      <div className="overflow-auto px-6 py-4">
+        {messages.map((message) => (
+          <ChatBox
+            message={message.text}
+            time={message.time}
+            position={message.sender === "assistant" ? "start" : "end"}
+          />
+        ))}
+        {aiIsReplying && <ChatLoader />}
+      </div>
+      <Footer onSendMessage={sendMessage} isLoadingResponse={aiIsReplying} />
+    </>
   );
 }

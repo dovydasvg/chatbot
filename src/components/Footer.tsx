@@ -1,14 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
+import { api } from "~/utils/api";
 
-export default function Footer() {
+type Props = {
+  onSendMessage: (message: string) => void;
+  isLoadingResponse: boolean;
+};
+
+export default function Footer({ onSendMessage, isLoadingResponse }: Props) {
+  const [message, setMessage] = useState("");
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  };
+
+  const sendMessage = () => {
+    if (!message) return;
+    onSendMessage(message);
+    setMessage("");
+  };
+
   return (
     <div className="flex gap-2 px-6 py-4">
       <input
         placeholder="Type a message"
         max={100}
-        className="text-md w-full rounded-lg  border-transparent bg-gray-700 px-4 py-2 font-normal text-white accent-transparent outline-none focus:border-none focus:border-transparent focus:ring-0 focus:ring-offset-0"
+        onKeyDown={handleKeyDown}
+        value={message}
+        disabled={isLoadingResponse}
+        onChange={(e) => setMessage(e.target.value)}
+        className="text-md w-full rounded-lg  border-transparent bg-neutral-700 px-4 py-2 font-normal text-white accent-transparent outline-none focus:border-none focus:border-transparent focus:ring-0 focus:ring-offset-0"
       />
-      <button className="btn btn-square btn-primary rounded-lg">
+      <button
+        className="btn btn-square btn-primary rounded-lg"
+        disabled={isLoadingResponse || !message}
+        onClick={sendMessage}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-6 w-6"
