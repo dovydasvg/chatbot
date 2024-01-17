@@ -10,6 +10,7 @@ export default function IntroPopup() {
     const modal = document.getElementById(MODAL_ID) as HTMLDialogElement;
     modal?.showModal();
   }, []);
+
   return (
     <dialog id={MODAL_ID} className="modal">
       <div className="modal-box bg-neutral-800">
