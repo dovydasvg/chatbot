@@ -23,6 +23,10 @@ export default function IntroPopup() {
     setUser((prev) => ({ ...prev, name: newUserName }));
     const modal = document.getElementById(MODAL_ID) as HTMLDialogElement;
     modal?.close();
+    // make full screen
+    const doc = document.documentElement;
+
+    doc.requestFullscreen();
   };
 
   return (
