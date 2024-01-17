@@ -12,13 +12,13 @@ export default function IntroPopup() {
     modal?.showModal();
   }, []);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDialogElement>) => {
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLDialogElement>) => {
     if (e.key === "Enter") {
-      handleStartClick();
+      await handleStartClick();
     }
   };
 
-  const handleStartClick = () => {
+  const handleStartClick = async () => {
     if (!newUserName) return;
     setUser((prev) => ({ ...prev, name: newUserName }));
     const modal = document.getElementById(MODAL_ID) as HTMLDialogElement;
@@ -26,7 +26,7 @@ export default function IntroPopup() {
     // make full screen
     const doc = document.documentElement;
 
-    doc.requestFullscreen();
+    await doc.requestFullscreen();
   };
 
   return (

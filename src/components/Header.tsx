@@ -11,13 +11,13 @@ export default function Header() {
     }
   };
 
-  const handleExitFullScreen = () => {
+  const handleExitFullScreen = async () => {
     const isFullScreen = document.fullscreenElement;
     if (!isFullScreen) {
       const doc = document.documentElement;
-      doc.requestFullscreen();
+      await doc.requestFullscreen();
     } else {
-      document.exitFullscreen();
+      await document.exitFullscreen();
     }
   };
 
