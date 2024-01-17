@@ -21,7 +21,7 @@ export default function Footer({ onSendMessage, isLoadingResponse }: Props) {
   };
 
   return (
-    <div className="flex gap-2 px-6 py-4">
+    <div className="mt-auto flex gap-2 px-6 py-4">
       <input
         placeholder="Type a message"
         max={100}
