@@ -30,7 +30,7 @@ export default function IntroPopup() {
         <div className="modal-action">
           <form method="dialog">
             <button className="btn btn-primary" disabled={!user.name}>
-              Let's go!
+              Start
             </button>
           </form>
         </div>

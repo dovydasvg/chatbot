@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
 
-import Footer from "~/components/Footer";
 import Header from "~/components/Header";
 import IntroPopup from "~/components/IntroPopup";
 

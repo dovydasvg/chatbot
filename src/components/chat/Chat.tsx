@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import ChatLoader from "./ChatLoader";
 import Footer from "../Footer";
 import { getCurrentTimeString } from "~/utils/date";
-import { Message } from "~/shared/types";
+import type { Message } from "~/shared/types";
 import { useAtom } from "jotai";
 import { userAtom } from "~/store/atoms/user";
 import { getIntroMessageWithName } from "./helper-function";
@@ -45,7 +45,7 @@ export default function Chat() {
       user: { name: user.name },
     });
     const botMessage: Message = {
-      text: response || "Sorry, I didn't get that",
+      text: response ?? "Sorry, I didn't get that",
       time: getCurrentTimeString(),
       sender: "assistant",
     };
@@ -58,6 +58,7 @@ export default function Chat() {
       <div className="overflow-auto px-6 py-4">
         {messages.map((message) => (
           <ChatBox
+            key={message.text + message.time}
             message={message.text}
             time={message.time}
             position={message.sender === "assistant" ? "start" : "end"}
