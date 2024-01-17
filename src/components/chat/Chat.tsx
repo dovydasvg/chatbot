@@ -12,22 +12,18 @@ import { getIntroMessageWithName } from "./helper-function";
 
 export default function Chat() {
   const [user] = useAtom(userAtom);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      text: getIntroMessageWithName(user.name),
-      time: dayjs().format("h:mm A"),
-      sender: "assistant",
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    setMessages([
-      {
-        text: getIntroMessageWithName(user.name),
-        time: dayjs().format("h:mm A"),
-        sender: "assistant",
-      },
-    ]);
+    if (user.name.length > 0) {
+      setMessages([
+        {
+          text: getIntroMessageWithName(user.name),
+          time: dayjs().format("h:mm A"),
+          sender: "assistant",
+        },
+      ]);
+    }
   }, [user.name]);
   const { mutateAsync: replyToAi, isLoading: aiIsReplying } =
     api.post.replyToAi.useMutation();
