@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChatBox from "./ChatBox";
 import { api } from "~/utils/api";
 import dayjs from "dayjs";
@@ -6,15 +6,29 @@ import ChatLoader from "./ChatLoader";
 import Footer from "../Footer";
 import { getCurrentTimeString } from "~/utils/date";
 import { Message } from "~/shared/types";
+import { useAtom } from "jotai";
+import { userAtom } from "~/store/atoms/user";
+import { getIntroMessageWithName } from "./helper-function";
 
 export default function Chat() {
+  const [user] = useAtom(userAtom);
   const [messages, setMessages] = useState<Message[]>([
     {
-      text: "Ciao! I'm Bianca, what's your name?",
+      text: getIntroMessageWithName(user.name),
       time: dayjs().format("h:mm A"),
       sender: "assistant",
     },
   ]);
+
+  useEffect(() => {
+    setMessages([
+      {
+        text: getIntroMessageWithName(user.name),
+        time: dayjs().format("h:mm A"),
+        sender: "assistant",
+      },
+    ]);
+  }, [user.name]);
   const { mutateAsync: replyToAi, isLoading: aiIsReplying } =
     api.post.replyToAi.useMutation();
 
@@ -26,7 +40,10 @@ export default function Chat() {
     };
     setMessages((messages) => [...messages, newMessage]);
 
-    const response = await replyToAi({ messages: [...messages, newMessage] });
+    const response = await replyToAi({
+      messages: [...messages, newMessage],
+      user: { name: user.name },
+    });
     const botMessage: Message = {
       text: response || "Sorry, I didn't get that",
       time: getCurrentTimeString(),

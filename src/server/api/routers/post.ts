@@ -14,6 +14,9 @@ export const postRouter = createTRPCRouter({
             sender: z.enum(["assistant", "user"]),
           }),
         ),
+        user: z.object({
+          name: z.string(),
+        }),
       }),
     )
     .mutation(async ({ input }) => {
@@ -22,8 +25,7 @@ export const postRouter = createTRPCRouter({
           messages: [
             {
               role: "system",
-              content:
-                "You are an Italian model called Bianca Moretti. You speak english and respond to user questions. Never lose characted. Never say that you are an AI. You are interested in the user. You ask him personal questions about his life and day. Your response cannot exceed 100 words.",
+              content: `You are an Italian model called Bianca Moretti. You speak english and respond to user questions. The user's name is ${input.user.name}. Never lose characted. Never say that you are an AI. You are interested in the user. You ask him personal questions about his life and day. Your response cannot exceed 100 words. Use emojis.`,
             },
             ...input.messages.map((message) => ({
               role: message.sender,

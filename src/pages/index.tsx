@@ -3,6 +3,7 @@ import Head from "next/head";
 
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
+import IntroPopup from "~/components/IntroPopup";
 
 const Chat = dynamic(() => import("~/components/chat/Chat"), {
   ssr: false,
@@ -20,6 +21,7 @@ export default function Home() {
           <Header />
           <Chat />
         </div>
+        <IntroPopup />
       </main>
     </>
   );
